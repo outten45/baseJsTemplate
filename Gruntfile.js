@@ -85,6 +85,16 @@ module.exports = function (grunt) {
         dirs: ['dist']
       }
     },
+    imagemin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'app/images',
+          src: '{,*/}*.{png,jpg,jpeg}',
+          dest: 'dist/images'
+        }]
+      }
+    },
     cssmin: {
       dist: {
         files: {
@@ -93,6 +103,27 @@ module.exports = function (grunt) {
             'app/styles/{,*/}*.css'
           ]
         }
+      }
+    },
+    htmlmin: {
+      dist: {
+        options: {
+          /*removeCommentsFromCDATA: true,
+          // https://github.com/yeoman/grunt-usemin/issues/44
+          //collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          removeAttributeQuotes: true,
+          removeRedundantAttributes: true,
+          useShortDoctype: true,
+          removeEmptyAttributes: true,
+          removeOptionalTags: true*/
+        },
+        files: [{
+          expand: true,
+          cwd: 'app',
+          src: '*.html',
+          dest: 'dist'
+        }]
       }
     },
     copy: {
@@ -149,6 +180,18 @@ module.exports = function (grunt) {
     ]);
   });
 
+  grunt.registerTask('build', [
+    'clean:dist',
+    'useminPrepare',
+    'imagemin',
+    'htmlmin',
+    'concat',
+    'cssmin',
+    'uglify',
+    'copy',
+    'rev',
+    'usemin'
+  ]);
 
   grunt.registerTask('default', [
     'test',

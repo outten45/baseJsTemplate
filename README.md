@@ -1,5 +1,13 @@
 ## Getting Started
 
+Install global commands:
+
+    > npm install -g grunt-cli bower
+
+Install node modules:
+
+    > npm install
+
 Install browser js files:
 
     > bower install
