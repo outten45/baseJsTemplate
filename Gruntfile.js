@@ -10,11 +10,16 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('assemble-less');
 
   grunt.initConfig({
     watch: {
       options: {
         nospawn: true
+      },
+      less: {
+        files: ['app/styles/{,*/}*.less'],
+        tasks: ['less'],
       },
       livereload: {
         options: {
@@ -23,6 +28,7 @@ module.exports = function (grunt) {
         files: [
           'app/*.html',
           '{.tmp,app}/styles/{,*/}*.css',
+          '{.tmp,app}/styles/{,*/}*.less',
           '{.tmp,app}/scripts/{,*/}*.js',
           'app/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
           'app/scripts/templates/*.{ejs,mustache,hbs}'
@@ -158,6 +164,17 @@ module.exports = function (grunt) {
           ]
         }
       }
+    },
+    less: {
+      options: {
+        paths: 'app/components/bootstrap3-less',
+        compress: false
+      },
+      components: {
+        files: 
+        { ".tmp/styles/main.css": ["app/styles/*.less"] }
+        
+      }
     }
     
   });
@@ -176,12 +193,14 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'connect:livereload',
+      'less',
       'watch'
     ]);
   });
 
   grunt.registerTask('build', [
     'clean:dist',
+    'less',
     'useminPrepare',
     'imagemin',
     'htmlmin',
